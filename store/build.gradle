@@ -1,0 +1,55 @@
+plugins {
+    id 'java'
+    id 'org.springframework.boot' version '3.5.5'
+    id 'io.spring.dependency-management' version '1.1.7'
+    id 'com.google.cloud.tools.jib' version '3.4.4'
+}
+
+group = 'com.code'
+version = '0.0.1-SNAPSHOT'
+description = 'Demo project for Spring Boot'
+
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(21)
+    }
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    implementation 'org.springframework.boot:spring-boot-starter-actuator'
+    runtimeOnly 'com.h2database:h2'
+    implementation 'org.postgresql:postgresql:42.7.3'
+    implementation 'jakarta.annotation:jakarta.annotation-api'
+
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+}
+
+tasks.named('test') {
+    useJUnitPlatform()
+}
+
+// ---------------- Jib Config ----------------
+// ---------------- Jib Config ----------------
+// ---------------- Jib Config ----------------
+jib {
+    from {
+        image = "eclipse-temurin:21-jre"
+    }
+    to {
+        image = "your-dockerhub-username/your-app:latest"
+    }
+    container {
+        jvmFlags = ["-Xms512m", "-Xmx512m"]
+        ports = ["8080"]
+    }
+}
+bootBuildImage {
+    imageName = "docker.io/afiyakhalid/firstjobapp:0.0.1-SNAPSHOT"
+}
