@@ -13,7 +13,16 @@ public class Job {
      private String minSalary;
      private String maxSalary;
      private String location;
-     private Long companyId;
+
+    public Long getCompanyId() {
+        return companyId;
+    }
+
+    public void setCompanyId(Long companyId) {
+        this.companyId = companyId;
+    }
+
+    private Long companyId;
 
 
 

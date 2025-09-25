@@ -1,9 +1,11 @@
 package com.afiya.jobms.job;
 
+import com.afiya.jobms.job.dto.JobWithCompanyDto;
+
 import java.util.List;
 
 public interface  JobService {
-    List<Job> findAll();
+    List<JobWithCompanyDto> findAll();
     void createJob(Job job);
 
     Job getJobById(Long id);

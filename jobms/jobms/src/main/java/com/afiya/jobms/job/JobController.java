@@ -1,6 +1,7 @@
 package com.afiya.jobms.job;
 
 
+import com.afiya.jobms.job.dto.JobWithCompanyDto;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -17,7 +18,7 @@ public class JobController {
     }
 
     @GetMapping("/jobs")
-    public ResponseEntity<List<Job>> findAll(){
+    public ResponseEntity<List<JobWithCompanyDto>> findAll(){
 
         return ResponseEntity.ok(jobservice.findAll());
     }

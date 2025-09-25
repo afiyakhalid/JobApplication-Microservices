@@ -4,8 +4,12 @@ package com.afiya.jobms.job.impl;
 import com.afiya.jobms.job.Job;
 import com.afiya.jobms.job.JobRepository;
 import com.afiya.jobms.job.JobService;
+import com.afiya.jobms.job.dto.JobWithCompanyDto;
+import com.afiya.jobms.job.external.Company;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -23,8 +27,22 @@ public class JobServiceImplementation implements JobService {
 //    private Long nextId = 1L;//initializes the id to "1" if id is not specified"
 
     @Override
-    public List<Job> findAll() {
-        return jobRepository.findAll();
+    public List<JobWithCompanyDto> findAll() {
+        List<Job> jobs=jobRepository.findAll();
+        List<JobWithCompanyDto> jwc=new ArrayList<>();
+
+        for (Job job:jobs){
+            JobWithCompanyDto dto=new JobWithCompanyDto();
+            dto.setJob(job);
+            RestTemplate rest=new RestTemplate();
+            Company company=rest.getForObject("http://localhost:8083/companies/"+job.getCompanyId(), Company.class);
+            dto.setCompany(company);
+            jwc.add(dto);
+        }
+
+
+
+        return jwc;
     }
 
     @Override
