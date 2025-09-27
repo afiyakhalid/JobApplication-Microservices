@@ -4,8 +4,9 @@ package com.afiya.jobms.job.impl;
 import com.afiya.jobms.job.Job;
 import com.afiya.jobms.job.JobRepository;
 import com.afiya.jobms.job.JobService;
-import com.afiya.jobms.job.dto.JobWithCompanyDto;
+import com.afiya.jobms.job.dto.JobWithDto;
 import com.afiya.jobms.job.external.Company;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
@@ -17,7 +18,8 @@ import java.util.Optional;
 public class JobServiceImplementation implements JobService {
     JobRepository jobRepository;
     private Long nextId = 1L;//initializes the id to "1" if id is not specified"
-
+@Autowired
+RestTemplate restTemplate;
     public JobServiceImplementation(JobRepository jobRepository) {
         this.jobRepository = jobRepository;
     }
@@ -27,15 +29,17 @@ public class JobServiceImplementation implements JobService {
 //    private Long nextId = 1L;//initializes the id to "1" if id is not specified"
 
     @Override
-    public List<JobWithCompanyDto> findAll() {
+    public List<JobWithDto> findAll() {
         List<Job> jobs=jobRepository.findAll();
-        List<JobWithCompanyDto> jwc=new ArrayList<>();
+        List<JobWithDto> jwc=new ArrayList<>();
 
         for (Job job:jobs){
-            JobWithCompanyDto dto=new JobWithCompanyDto();
+            JobWithDto dto=new JobWithDto();
             dto.setJob(job);
-            RestTemplate rest=new RestTemplate();
-            Company company=rest.getForObject("http://localhost:8083/companies/"+job.getCompanyId(), Company.class);
+//            RestTemplate restTemplate=new RestTemplate();
+
+            Company company = restTemplate.getForObject("http://companyms/companies/" + job.getCompanyId(), Company.class);
+
             dto.setCompany(company);
             jwc.add(dto);
         }

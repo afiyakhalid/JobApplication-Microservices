@@ -13,6 +13,7 @@ public class Review {
     private String description;
     private String title;
 
+    private Long companyId;
     public Long getCompanyId() {
         return companyId;
     }
@@ -21,7 +22,7 @@ public class Review {
         this.companyId = companyId;
     }
 
-    private Long companyId;
+
 
 
 

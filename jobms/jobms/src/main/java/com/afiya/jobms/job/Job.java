@@ -14,6 +14,7 @@ public class Job {
      private String maxSalary;
      private String location;
 
+
     public Long getCompanyId() {
         return companyId;
     }
@@ -86,6 +87,7 @@ public class Job {
         this.minSalary = minSalary;
         this.maxSalary = maxSalary;
         this.location = location;
+        this.companyId = companyId;
 
     }
 }
