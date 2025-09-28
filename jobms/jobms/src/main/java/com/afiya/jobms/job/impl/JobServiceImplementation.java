@@ -4,6 +4,7 @@ package com.afiya.jobms.job.impl;
 import com.afiya.jobms.job.Job;
 import com.afiya.jobms.job.JobRepository;
 import com.afiya.jobms.job.JobService;
+import com.afiya.jobms.job.clients.CompanyClient;
 import com.afiya.jobms.job.dto.JobWithDto;
 import com.afiya.jobms.job.external.Company;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,9 +21,11 @@ public class JobServiceImplementation implements JobService {
     private Long nextId = 1L;//initializes the id to "1" if id is not specified"
 @Autowired
 RestTemplate restTemplate;
-    public JobServiceImplementation(JobRepository jobRepository) {
+    public JobServiceImplementation(JobRepository jobRepository , CompanyClient companyClient) {
+        this.companyClient = companyClient;
         this.jobRepository = jobRepository;
     }
+    private CompanyClient companyClient;
 
     //    private List<Job> jobs = new ArrayList<>();
 //    JobRepository jobRepository;
@@ -38,8 +41,7 @@ RestTemplate restTemplate;
             dto.setJob(job);
 //            RestTemplate restTemplate=new RestTemplate();
 
-            Company company = restTemplate.getForObject("http://companyms/companies/" + job.getCompanyId(), Company.class);
-
+            Company company = companyClient.getCompany(job.getCompanyId());
             dto.setCompany(company);
             jwc.add(dto);
         }
