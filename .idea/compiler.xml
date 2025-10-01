@@ -7,6 +7,7 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <module name="reviewms" />
+        <module name="apigateway" />
         <module name="companyms" />
         <module name="jobms" />
         <module name="ConfigServer" />
@@ -17,6 +18,7 @@
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
       <module name="ConfigServer" options="-parameters" />
+      <module name="apigateway" options="-parameters" />
       <module name="companyms" options="-parameters" />
       <module name="jobms" options="-parameters" />
       <module name="reviewms" options="-parameters" />
