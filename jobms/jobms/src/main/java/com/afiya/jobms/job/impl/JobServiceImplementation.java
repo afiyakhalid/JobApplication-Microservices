@@ -33,7 +33,7 @@ RestTemplate restTemplate;
 //    private Long nextId = 1L;//initializes the id to "1" if id is not specified"
 
     @Override
-    @CircuitBreaker(name="companyBreaker")
+    @CircuitBreaker(name="companyBreaker",fallbackMethod = "companyBreakerFallback")
     public List<JobWithDto> findAll() {
         List<Job> jobs=jobRepository.findAll();
         List<JobWithDto> jwc=new ArrayList<>();
@@ -51,6 +51,11 @@ RestTemplate restTemplate;
 
 
         return jwc;
+    }
+    public List<String> companyBreakerFallback(Exception e){
+        List<String> list=new ArrayList<>();
+        list.add("Company Service is down");
+        return list;
     }
 
     @Override
