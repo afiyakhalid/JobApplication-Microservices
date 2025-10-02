@@ -7,6 +7,7 @@ import com.afiya.jobms.job.JobService;
 import com.afiya.jobms.job.clients.CompanyClient;
 import com.afiya.jobms.job.dto.JobWithDto;
 import com.afiya.jobms.job.external.Company;
+import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
@@ -32,6 +33,7 @@ RestTemplate restTemplate;
 //    private Long nextId = 1L;//initializes the id to "1" if id is not specified"
 
     @Override
+    @CircuitBreaker(name="companyBreaker")
     public List<JobWithDto> findAll() {
         List<Job> jobs=jobRepository.findAll();
         List<JobWithDto> jwc=new ArrayList<>();
