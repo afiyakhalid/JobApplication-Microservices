@@ -3,6 +3,7 @@ package com.afiya.companyms.companies.impl;
 import com.afiya.companyms.companies.Company;
 import com.afiya.companyms.companies.CompanyRepository;
 import com.afiya.companyms.companies.CompanyService;
+import com.afiya.companyms.companies.dto.ReviewMessage;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -56,5 +57,12 @@ public class CompanyServiceImplementation implements CompanyService {
         return companyRepository.findById(id).orElse(null);
     }
 
-}
+    @Override
+    public void updatecompany(ReviewMessage reviewMessage) {
+System.out.println("Received review message: " + reviewMessage.getDescription());
+
+        }
+    }
+
+
 
