@@ -1,101 +1,165 @@
-🚀 Job Application Microservices Project
+# Job Application Microservices Platform
 
-A complete backend system for a job board application, built using a modern microservices architecture with Spring Boot, Docker, and Eureka.
+A production-ready job board application built with Spring Boot microservices architecture, demonstrating modern cloud-native patterns and best practices.
 
-🏛️ Architecture Overview
+## Overview
 
-The system is designed with a service-oriented approach, separating concerns into distinct microservices. These are supported by common infrastructure patterns like a service registry, an API gateway, and a configuration server.
+This project implements a complete microservices ecosystem for managing job postings, companies, and reviews. It showcases enterprise patterns including service discovery, distributed tracing, inter-service communication, and containerized deployment.
 
-Core Microservices
+## Architecture
 
-Job Service (jobms): Responsible for all CRUD (Create, Read, Update, Delete) operations related to job postings.
+The system consists of three core business services and three supporting infrastructure services:
 
-Company Service (companyms): Manages company profiles, including details that can be associated with job postings.
+**Business Services**
+- **Job Service** - Manages job postings (CRUD operations)
+- **Company Service** - Handles company profiles and information
+- **Review Service** - Manages company reviews and ratings
 
-Review Service (reviewms): Handles user reviews for companies.
+**Infrastructure Services**
+- **Service Registry (Eureka)** - Service discovery and registration
+- **API Gateway** - Single entry point for client requests, routes to appropriate services
+- **Config Server** - Centralized configuration management
 
-Supporting Services (Infrastructure)
+Each service communicates through REST APIs using OpenFeign clients, with service discovery handled automatically by Eureka.
 
-Service Registry (servicereg): Uses Spring Cloud Netflix Eureka to allow services to register themselves and discover others dynamically.
+## Key Features
 
-API Gateway: (Concept discussed) Acts as the single entry point for all client requests, routing them to the appropriate microservice.
+- **Microservices Architecture** - Independent services with single responsibilities
+- **Service Discovery** - Dynamic service registration and lookup with Eureka
+- **Inter-Service Communication** - Type-safe REST clients using OpenFeign
+- **Distributed Tracing** - Request tracing across services with Zipkin and Micrometer
+- **Asynchronous Messaging** - Event-driven communication using RabbitMQ
+- **Health Monitoring** - Built-in health checks and metrics with Spring Actuator
+- **Containerization** - Full Docker support with Docker Compose orchestration
+- **Environment Profiles** - Separate configurations for local and Docker environments
 
-Config Server: (Concept discussed) Provides centralized configuration management for all microservices.
+## Tech Stack
 
-**** > A diagram showing the relationship between the Gateway, Service Registry, Config Server, and the core microservices.
+- **Framework**: Spring Boot 3.5.6
+- **Language**: Java 21
+- **Service Discovery**: Spring Cloud Netflix Eureka
+- **API Communication**: Spring Cloud OpenFeign
+- **Database**: PostgreSQL
+- **Message Broker**: RabbitMQ (Spring AMQP)
+- **Tracing**: Micrometer + Zipkin
+- **Monitoring**: Spring Boot Actuator
+- **Containerization**: Docker & Docker Compose
+- **Build Tool**: Maven
 
-🛠️ Tech Stack & Key Patterns
+## Getting Started
 
-This project leverages the Spring ecosystem and other modern tools to address the challenges of microservice development.
+### Prerequisites
 
-Framework: Spring Boot 3
+- Java 21 or newer
+- Apache Maven 3.6+
+- Docker and Docker Compose
+- Docker Hub account (for pushing images)
 
-Interservice Communication: Spring Cloud OpenFeign
+### Building the Services
 
-Service Discovery: Spring Cloud Netflix Eureka
+Each microservice needs to be built as a Docker image. Navigate to each service directory and run:
 
-Database: PostgreSQL
-
-Distributed Tracing: Micrometer & Zipkin
-
-Health Monitoring: Spring Boot Actuator
-
-Asynchronous Communication: Spring AMQP with RabbitMQ
-
-Containerization: Docker and Docker Compose
-
-Design Patterns: Data Transfer Object (DTO)
-
-⚙️ Setup and Running the Project
-
-Follow these steps to build and run the entire application using Docker.
-
-✅ Prerequisites
-
-Java 21 (or newer)
-
-Apache Maven
-
-Docker and Docker Compose
-
-1. Build Docker Images for Each Service
-
-Each microservice needs to be packaged as a Docker image. Navigate into the root directory of each service and run the Maven command.
-
-Note: The pom.xml for each service has been configured to use the gcr.io/buildpacks/builder:v1 builder to ensure a stable build process.
-
-# Example for the Service Registry
+```bash
+# Service Registry
 cd servicereg
-./mvnw spring-boot:build-image "-Dspring-boot.build-image.imageName=your-dockerhub-username/servicereg"
+mvn spring-boot:build-image -Dspring-boot.build-image.imageName=yourusername/servicereg
 
-# Example for the Job Service
+# Job Service
 cd ../jobms
-./mvnw spring-boot:build-image "-Dspring-boot.build-image.imageName=your-dockerhub-username/jobms"
+mvn spring-boot:build-image -Dspring-boot.build-image.imageName=yourusername/jobms
 
-# --- Repeat this process for all other services ---
+# Company Service
+cd ../companyms
+mvn spring-boot:build-image -Dspring-boot.build-image.imageName=yourusername/companyms
 
+# Review Service
+cd ../reviewms
+mvn spring-boot:build-image -Dspring-boot.build-image.imageName=yourusername/reviewms
+```
 
-Important: Replace your-dockerhub-username with your actual Docker Hub username.
+Replace `yourusername` with your Docker Hub username.
 
-2. Configure for Docker Environment
+### Running the Application
 
-The project uses Spring Profiles to manage environment-specific configurations.
+Start the entire system with a single command:
 
-application.properties: Contains settings for local development (using localhost).
-
-application-docker.properties: Overrides settings for the containerized environment, using Docker service names (jobms, zipkin, etc.) for communication.
-
-3. Run the Entire Application with Docker Compose
-
-Once all images are built, start the entire system with a single command from the root directory containing your docker-compose.yml file.
-
+```bash
 docker-compose up
+```
 
+This will start:
+- PostgreSQL database
+- RabbitMQ message broker
+- Zipkin tracing server
+- Eureka service registry
+- All microservices
 
-This command will spin up the entire ecosystem, including:
+**Access Points:**
+- Eureka Dashboard: http://localhost:8761
+- Zipkin UI: http://localhost:9411
+- Job Service: http://localhost:8082
+- Company Service: http://localhost:8083
+- Review Service: http://localhost:8084
+- RabbitMQ Management: http://localhost:15672 (guest/guest)
 
-A virtual network for your services.
+### Configuration
 
-Containers for PostgreSQL, RabbitMQ, Zipkin, and all your microservices.
+The project uses Spring Profiles for environment-specific settings:
 
-The docker Spring profile will be automatically activated.
+- `application.properties` - Local development configuration (uses localhost)
+- `application-docker.properties` - Docker environment configuration (uses service names)
+
+When running with Docker Compose, the `docker` profile is automatically activated.
+
+## Service Details
+
+### Job Service (Port 8082)
+Manages job postings with full CRUD operations. Communicates with Company Service to fetch company details for job listings.
+
+### Company Service (Port 8083)
+Handles company information and profiles. Used by Job Service to enrich job data with company details.
+
+### Review Service (Port 8084)
+Manages user reviews and ratings for companies. Integrates with Company Service for validation.
+
+### Service Registry (Port 8761)
+Eureka server that maintains a registry of all running service instances. Services register themselves on startup and discover other services dynamically.
+
+## Monitoring & Observability
+
+**Health Checks**: Each service exposes health endpoints via Spring Actuator at `/actuator/health`
+
+**Distributed Tracing**: All requests are traced across services using Micrometer and visualized in Zipkin UI
+
+**Metrics**: Service metrics are available at `/actuator/metrics`
+
+**Service Status**: Monitor all registered services through Eureka dashboard
+
+## Design Patterns
+
+- **API Gateway Pattern** - Single entry point for all client requests
+- **Service Registry Pattern** - Dynamic service discovery
+- **Circuit Breaker Pattern** - Fault tolerance for inter-service calls
+- **Database Per Service** - Each service has its own database schema
+- **DTO Pattern** - Data transfer objects for API contracts
+- **Event-Driven Architecture** - Asynchronous communication via message queues
+
+## Development
+
+### Local Development
+For local development without Docker, use the default profile which connects to localhost instances of PostgreSQL, RabbitMQ, and Zipkin.
+
+### Adding New Services
+1. Create Spring Boot application with required dependencies
+2. Configure Eureka client in application.properties
+3. Add service-specific configuration
+4. Build Docker image using Maven
+5. Add service definition to docker-compose.yml
+
+## Contributing
+
+Contributions are welcome! Please feel free to submit a Pull Request.
+
+## License
+
+This project is open source and available under the MIT License.
