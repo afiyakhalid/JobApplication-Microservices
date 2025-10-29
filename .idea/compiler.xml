@@ -11,6 +11,7 @@
         <module name="companyms" />
         <module name="jobms" />
         <module name="ConfigServer" />
+        <module name="auth_ms" />
         <module name="servicereg" />
       </profile>
     </annotationProcessing>
@@ -19,6 +20,7 @@
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
       <module name="ConfigServer" options="-parameters" />
       <module name="apigateway" options="-parameters" />
+      <module name="auth_ms" options="-parameters" />
       <module name="companyms" options="-parameters" />
       <module name="jobms" options="-parameters" />
       <module name="reviewms" options="-parameters" />
